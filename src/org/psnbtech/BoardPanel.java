@@ -254,7 +254,6 @@ public class BoardPanel extends JPanel {
 	 */
 	private boolean isOccupied(int x, int y) {
 		return tiles[y][x] != null;
-//		return tiles[y * COL_COUNT + x] != null;
 	}
 	
 	/**
@@ -265,7 +264,6 @@ public class BoardPanel extends JPanel {
 	 */
 	private void setTile(int  x, int y, TileType type) {
 		tiles[y][x] = type;
-//		tiles[y * COL_COUNT + x] = type;
 	}
 		
 	/**
@@ -276,7 +274,6 @@ public class BoardPanel extends JPanel {
 	 */
 	private TileType getTile(int x, int y) {
 		return tiles[y][x];
-//		return tiles[y * COL_COUNT + x];
 	}
 	
 	@Override
