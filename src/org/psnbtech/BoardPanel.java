@@ -105,7 +105,7 @@ public class BoardPanel extends JPanel {
 	/**
 	 * The tiles that make up the board.
 	 */
-	private TileType[] tiles;
+	private TileType[][] tiles;
 		
 	/**
 	 * Crates a new GameBoard instance.
@@ -113,7 +113,7 @@ public class BoardPanel extends JPanel {
 	 */
 	public BoardPanel(Tetris tetris) {
 		this.tetris = tetris;
-		this.tiles = new TileType[COL_COUNT * ROW_COUNT];
+		this.tiles = new TileType[ROW_COUNT][COL_COUNT];
 		
 		setPreferredSize(new Dimension(PANEL_WIDTH, PANEL_HEIGHT));
 		setBackground(Color.BLACK);
@@ -127,8 +127,10 @@ public class BoardPanel extends JPanel {
 		 * Loop through every tile index and set it's value
 		 * to null to clear the board.
 		 */
-		for(int i = 0; i < tiles.length; i++) {
-			tiles[i] = null;
+		for(int i = 0; i < ROW_COUNT; i++) {
+			for(int j = 0; j < COL_COUNT; j++) {
+				tiles[i][j] = null;
+			}
 		}
 	}
 	
@@ -251,7 +253,8 @@ public class BoardPanel extends JPanel {
 	 * @return Whether or not the tile is occupied.
 	 */
 	private boolean isOccupied(int x, int y) {
-		return tiles[y * COL_COUNT + x] != null;
+		return tiles[y][x] != null;
+//		return tiles[y * COL_COUNT + x] != null;
 	}
 	
 	/**
@@ -261,7 +264,8 @@ public class BoardPanel extends JPanel {
 	 * @param type The value to set to the tile to.
 	 */
 	private void setTile(int  x, int y, TileType type) {
-		tiles[y * COL_COUNT + x] = type;
+		tiles[y][x] = type;
+//		tiles[y * COL_COUNT + x] = type;
 	}
 		
 	/**
@@ -271,7 +275,8 @@ public class BoardPanel extends JPanel {
 	 * @return The tile.
 	 */
 	private TileType getTile(int x, int y) {
-		return tiles[y * COL_COUNT + x];
+		return tiles[y][x];
+//		return tiles[y * COL_COUNT + x];
 	}
 	
 	@Override
