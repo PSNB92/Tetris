@@ -3,7 +3,7 @@ package org.psnbtech;
 
 import java.awt.*;
 
-enum TileType {
+enum Tile {
     TypeI(new Color(BoardPanel.COLOR_MIN, BoardPanel.COLOR_MAX, BoardPanel.COLOR_MAX), 4, new boolean[][]{
             {false, false, false, false},
             {true, true, true, true},
@@ -56,7 +56,7 @@ enum TileType {
 
     private boolean[][] tiles;
 
-    TileType(Color baseColor, int dimension, boolean[][] tiles) {
+    Tile(Color baseColor, int dimension, boolean[][] tiles) {
         this.baseColor = baseColor;
         this.lightColor = baseColor.brighter();
         this.darkColor = baseColor.darker();

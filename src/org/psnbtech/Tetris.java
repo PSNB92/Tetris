@@ -8,7 +8,7 @@ import java.util.Random;
 
 public class Tetris extends JFrame {
     private static final long FRAME_TIME = 1000L / 50L;
-    private static final int TYPE_COUNT = TileType.values().length;
+    private static final int TYPE_COUNT = Tile.values().length;
     private static final Random random = new Random();
 
     private BoardPanel board;
@@ -20,8 +20,8 @@ public class Tetris extends JFrame {
     private int score;
     private Clock logicTimer;
 
-    private TileType currentType;
-    private TileType nextType;
+    private Tile currentType;
+    private Tile nextType;
 
     private int currentCol;
     private int currentRow;
@@ -236,7 +236,7 @@ public class Tetris extends JFrame {
         this.level = 1;
         this.score = 0;
         this.gameSpeed = 1.0f;
-        this.nextType = TileType.values()[random.nextInt(TYPE_COUNT)];
+        this.nextType = Tile.values()[random.nextInt(TYPE_COUNT)];
         this.isNewGame = false;
         this.isGameOver = false;
         board.clear();
@@ -250,7 +250,7 @@ public class Tetris extends JFrame {
         this.currentCol = currentType.getSpawnColumn();
         this.currentRow = currentType.getSpawnRow();
         this.currentRotation = 0;
-        this.nextType = TileType.values()[random.nextInt(TYPE_COUNT)];
+        this.nextType = Tile.values()[random.nextInt(TYPE_COUNT)];
 
         if (!board.isValidAndEmpty(currentType, currentCol, currentRow, currentRotation)) {
             this.isGameOver = true;
@@ -317,11 +317,11 @@ public class Tetris extends JFrame {
         return level;
     }
 
-    TileType getPieceType() {
+    Tile getPieceType() {
         return currentType;
     }
 
-    TileType getNextPieceType() {
+    Tile getNextPieceType() {
         return nextType;
     }
 

@@ -26,11 +26,11 @@ class BoardPanel extends JPanel {
     static final int PANEL_HEIGHT = VISIBLE_ROW_COUNT * TILE_SIZE + BORDER_WIDTH * 2;
 
     private Tetris tetris;
-    private TileType[][] tiles;
+    private Tile[][] tiles;
 
     BoardPanel(Tetris tetris) {
         this.tetris = tetris;
-        this.tiles = new TileType[ROW_COUNT][COL_COUNT];
+        this.tiles = new Tile[ROW_COUNT][COL_COUNT];
 
         setPreferredSize(new Dimension(PANEL_WIDTH, PANEL_HEIGHT));
         setBackground(Color.BLACK);
@@ -44,22 +44,22 @@ class BoardPanel extends JPanel {
         }
     }
 
-    boolean isValidAndEmpty(TileType type, int x, int y, int rotation) {
-        if (notInValidColumn(type, x, rotation)) {
+    boolean isValidAndEmpty(Tile tile, int x, int y, int rotation) {
+        if (notInValidColumn(tile, x, rotation)) {
             return false;
         }
 
-        if (notInValidRow(type, y, rotation)) {
+        if (notInValidRow(tile, y, rotation)) {
             return false;
         }
 
-        return doesNotConflictWithOtherTiles(type, x, y, rotation);
+        return doesNotConflictWithOtherTiles(tile, x, y, rotation);
     }
 
-    private boolean doesNotConflictWithOtherTiles(TileType type, int x, int y, int rotation) {
-        for (int col = 0; col < type.getDimension(); col++) {
-            for (int row = 0; row < type.getDimension(); row++) {
-                if (type.isTile(col, row, rotation) && isOccupied(x + col, y + row)) {
+    private boolean doesNotConflictWithOtherTiles(Tile tile, int x, int y, int rotation) {
+        for (int col = 0; col < tile.getDimension(); col++) {
+            for (int row = 0; row < tile.getDimension(); row++) {
+                if (tile.isTile(col, row, rotation) && isOccupied(x + col, y + row)) {
                     return false;
                 }
             }
@@ -67,19 +67,19 @@ class BoardPanel extends JPanel {
         return true;
     }
 
-    private boolean notInValidRow(TileType type, int y, int rotation) {
-        return y < -type.getTopInset(rotation) || y + type.getDimension() - type.getBottomInset(rotation) >= ROW_COUNT;
+    private boolean notInValidRow(Tile tile, int y, int rotation) {
+        return y < -tile.getTopInset(rotation) || y + tile.getDimension() - tile.getBottomInset(rotation) >= ROW_COUNT;
     }
 
-    private boolean notInValidColumn(TileType type, int x, int rotation) {
-        return x < -type.getLeftInset(rotation) || x + type.getDimension() - type.getRightInset(rotation) >= COL_COUNT;
+    private boolean notInValidColumn(Tile tile, int x, int rotation) {
+        return x < -tile.getLeftInset(rotation) || x + tile.getDimension() - tile.getRightInset(rotation) >= COL_COUNT;
     }
 
-    void setPiece(TileType type, int x, int y, int rotation) {
-        for (int col = 0; col < type.getDimension(); col++) {
-            for (int row = 0; row < type.getDimension(); row++) {
-                if (type.isTile(col, row, rotation)) {
-                    setTile(col + x, row + y, type);
+    void setPiece(Tile tile, int x, int y, int rotation) {
+        for (int col = 0; col < tile.getDimension(); col++) {
+            for (int row = 0; row < tile.getDimension(); row++) {
+                if (tile.isTile(col, row, rotation)) {
+                    setTile(col + x, row + y, tile);
                 }
             }
         }
@@ -115,11 +115,11 @@ class BoardPanel extends JPanel {
         return tiles[y][x] != null;
     }
 
-    private void setTile(int x, int y, TileType type) {
-        tiles[y][x] = type;
+    private void setTile(int x, int y, Tile tile) {
+        tiles[y][x] = tile;
     }
 
-    private TileType getTile(int x, int y) {
+    private Tile getTile(int x, int y) {
         return tiles[y][x];
     }
 
@@ -151,7 +151,7 @@ class BoardPanel extends JPanel {
         g.setColor(Color.WHITE);
 
 			/*
-			 * Because both the game over and new game screens are nearly identical,
+             * Because both the game over and new game screens are nearly identical,
 			 * we can handle them together and just use a ternary operator to change
 			 * the messages that are displayed.
 			 */
@@ -172,7 +172,7 @@ class BoardPanel extends JPanel {
     private void drawAllTiles(Graphics g) {
         for (int x = 0; x < COL_COUNT; x++) {
             for (int y = HIDDEN_ROW_COUNT; y < ROW_COUNT; y++) {
-                TileType tile = getTile(x, y);
+                Tile tile = getTile(x, y);
                 if (tile != null) {
                     drawTile(tile, x * TILE_SIZE, (y - HIDDEN_ROW_COUNT) * TILE_SIZE, g);
                 }
@@ -181,51 +181,55 @@ class BoardPanel extends JPanel {
     }
 
     private void drawCurrentPiece(Graphics g) {
-        TileType type = tetris.getPieceType();
+        Tile tile = tetris.getPieceType();
         int pieceCol = tetris.getPieceCol();
         int pieceRow = tetris.getPieceRow();
         int rotation = tetris.getPieceRotation();
 
         //Draw the piece onto the board.
-        for (int col = 0; col < type.getDimension(); col++) {
-            for (int row = 0; row < type.getDimension(); row++) {
-                if (pieceRow + row >= 2 && type.isTile(col, row, rotation)) {
-                    drawTile(type, (pieceCol + col) * TILE_SIZE, (pieceRow + row - HIDDEN_ROW_COUNT) * TILE_SIZE, g);
+        for (int col = 0; col < tile.getDimension(); col++) {
+            for (int row = 0; row < tile.getDimension(); row++) {
+                if (pieceRow + row >= 2 && tile.isTile(col, row, rotation)) {
+                    drawTile(tile, (pieceCol + col) * TILE_SIZE, (pieceRow + row - HIDDEN_ROW_COUNT) * TILE_SIZE, g);
                 }
             }
         }
 
-        drawHelpingGhost(g, type, pieceCol, pieceRow, rotation);
+        drawHelpingGhost(g, tile, pieceCol, pieceRow, rotation);
     }
 
-    private void drawHelpingGhost(Graphics g, TileType type, int pieceCol, int pieceRow, int rotation) {
-        Color base = type.getBaseColor();
+    private void drawHelpingGhost(Graphics g, Tile tile, int pieceCol, int pieceRow, int rotation) {
+        Color base = tile.getBaseColor();
         Color transparentBase = new Color(base.getRed(), base.getGreen(), base.getBlue(), 20);
-        for (int lowest = pieceRow; lowest < ROW_COUNT; lowest++) {
-            if (isValidAndEmpty(type, pieceCol, lowest, rotation)) {
-                continue;
-            }
+        int lowest = getLowestTilePoint(tile, pieceCol, pieceRow, rotation);
+        drawGhostPieceAtPoint(g, tile, pieceCol, rotation, transparentBase, lowest);
+    }
 
-            //Draw the ghost one row higher than the one the collision took place at.
-            lowest--;
-
-            //Draw the ghost piece.
-            for (int col = 0; col < type.getDimension(); col++) {
-                for (int row = 0; row < type.getDimension(); row++) {
-                    if (lowest + row >= 2 && type.isTile(col, row, rotation)) {
-                        drawTile(transparentBase,
-                                transparentBase.brighter(),
-                                transparentBase.darker(),
-                                (pieceCol + col) * TILE_SIZE,
-                                (lowest + row - HIDDEN_ROW_COUNT) * TILE_SIZE,
-                                g
-                        );
-                    }
+    private void drawGhostPieceAtPoint(Graphics g, Tile tile, int pieceCol, int rotation, Color transparentBase, int lowest) {
+        for (int col = 0; col < tile.getDimension(); col++) {
+            for (int row = 0; row < tile.getDimension(); row++) {
+                if (lowest + row >= 2 && tile.isTile(col, row, rotation)) {
+                    drawTile(transparentBase,
+                            transparentBase.brighter(),
+                            transparentBase.darker(),
+                            (pieceCol + col) * TILE_SIZE,
+                            (lowest + row - HIDDEN_ROW_COUNT) * TILE_SIZE,
+                            g
+                    );
                 }
             }
-
-            break;
         }
+    }
+
+    private int getLowestTilePoint(Tile tile, int pieceCol, int pieceRow, int rotation) {
+        int lowest;
+        for (lowest = pieceRow; lowest < ROW_COUNT; lowest++) {
+            if (isValidAndEmpty(tile, pieceCol, lowest, rotation)) {
+                continue;
+            }
+            return lowest - 1;
+        }
+        throw new RuntimeException();
     }
 
     private void drawBackgroundGridAbovePieces(Graphics g) {
@@ -243,8 +247,8 @@ class BoardPanel extends JPanel {
         g.drawRect(0, 0, TILE_SIZE * COL_COUNT, TILE_SIZE * VISIBLE_ROW_COUNT);
     }
 
-    private void drawTile(TileType type, int x, int y, Graphics g) {
-        drawTile(type.getBaseColor(), type.getLightColor(), type.getDarkColor(), x, y, g);
+    private void drawTile(Tile tile, int x, int y, Graphics g) {
+        drawTile(tile.getBaseColor(), tile.getLightColor(), tile.getDarkColor(), x, y, g);
     }
 
     private void drawTile(Color base, Color light, Color dark, int x, int y, Graphics g) {

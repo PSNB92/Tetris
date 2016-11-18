@@ -56,7 +56,7 @@ class SidePanel extends JPanel {
     }
 
     private void drawPreviewPiece(Graphics g) {
-        TileType type = tetris.getNextPieceType();
+        Tile type = tetris.getNextPieceType();
         if (!tetris.isGameOver() && type != null) {
 
             int cols = type.getSideSize();
@@ -100,12 +100,12 @@ class SidePanel extends JPanel {
         g.drawString("P - Pause Game", LARGE_INSET, offset += TEXT_STRIDE);
     }
 
-    private void drawTile(TileType type, int x, int y, Graphics g) {
+    private void drawTile(Tile type, int x, int y, Graphics g) {
         drawBasicTile(type, x, y, g);
         drawLightningShadow(type, x, y, g);
     }
 
-    private void drawBasicTile(TileType type, int x, int y, Graphics g) {
+    private void drawBasicTile(Tile type, int x, int y, Graphics g) {
         g.setColor(type.getBaseColor());
         g.fillRect(x, y, TILE_SIZE, TILE_SIZE);
 
@@ -114,7 +114,7 @@ class SidePanel extends JPanel {
         g.fillRect(x + TILE_SIZE - SHADE_WIDTH, y, SHADE_WIDTH, TILE_SIZE);
     }
 
-    private void drawLightningShadow(TileType type, int x, int y, Graphics g) {
+    private void drawLightningShadow(Tile type, int x, int y, Graphics g) {
         g.setColor(type.getLightColor());
         for (int i = 0; i < SHADE_WIDTH; i++) {
             g.drawLine(x, y + i, x + TILE_SIZE - i - 1, y + i);
