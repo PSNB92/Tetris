@@ -160,8 +160,8 @@ public class SidePanel extends JPanel {
 			/*
 			 * Get the size properties of the current piece.
 			 */
-			int cols = type.getCols();
-			int rows = type.getRows();
+			int cols = type.getColumnsCount();
+			int rows = type.getRowsCount();
 			int dimension = type.getDimension();
 		
 			/*
