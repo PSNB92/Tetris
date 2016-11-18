@@ -4,42 +4,42 @@ package org.psnbtech;
 import java.awt.*;
 
 enum TileType {
-    TypeI(new Color(BoardPanel.COLOR_MIN, BoardPanel.COLOR_MAX, BoardPanel.COLOR_MAX), 4, 4, 1, new boolean[][]{
+    TypeI(new Color(BoardPanel.COLOR_MIN, BoardPanel.COLOR_MAX, BoardPanel.COLOR_MAX), 4, new boolean[][]{
             {false, false, false, false},
             {true, true, true, true},
             {false, false, false, false},
             {false, false, false, false},
 
     }),
-    TypeJ(new Color(BoardPanel.COLOR_MIN, BoardPanel.COLOR_MIN, BoardPanel.COLOR_MAX), 3, 3, 2, new boolean[][]{
+    TypeJ(new Color(BoardPanel.COLOR_MIN, BoardPanel.COLOR_MIN, BoardPanel.COLOR_MAX), 3, new boolean[][]{
             {true, false, false},
             {true, true, true},
             {false, false, false},
 
     }),
-    TypeL(new Color(BoardPanel.COLOR_MAX, 127, BoardPanel.COLOR_MIN), 3, 3, 2, new boolean[][]{
+    TypeL(new Color(BoardPanel.COLOR_MAX, 127, BoardPanel.COLOR_MIN), 3, new boolean[][]{
             {false, false, true},
             {true, true, true},
             {false, false, false},
 
     }),
-    TypeO(new Color(BoardPanel.COLOR_MAX, BoardPanel.COLOR_MAX, BoardPanel.COLOR_MIN), 2, 2, 2, new boolean[][]{
+    TypeO(new Color(BoardPanel.COLOR_MAX, BoardPanel.COLOR_MAX, BoardPanel.COLOR_MIN), 2, new boolean[][]{
             {true, true},
             {true, true},
 
     }),
-    TypeS(new Color(BoardPanel.COLOR_MIN, BoardPanel.COLOR_MAX, BoardPanel.COLOR_MIN), 3, 3, 2, new boolean[][]{
+    TypeS(new Color(BoardPanel.COLOR_MIN, BoardPanel.COLOR_MAX, BoardPanel.COLOR_MIN), 3, new boolean[][]{
             {false, true, true},
             {true, true, false},
             {false, false, false},
 
     }),
-    TypeT(new Color(128, BoardPanel.COLOR_MIN, 128), 3, 3, 2, new boolean[][]{
+    TypeT(new Color(128, BoardPanel.COLOR_MIN, 128), 3, new boolean[][]{
             {false, true, false},
             {true, true, true},
             {false, false, false},
     }),
-    TypeZ(new Color(BoardPanel.COLOR_MAX, BoardPanel.COLOR_MIN, BoardPanel.COLOR_MIN), 3, 3, 2, new boolean[][]{
+    TypeZ(new Color(BoardPanel.COLOR_MAX, BoardPanel.COLOR_MIN, BoardPanel.COLOR_MIN), 3, new boolean[][]{
             {true, true, false},
             {false, true, true},
             {false, false, false},
@@ -52,19 +52,17 @@ enum TileType {
     private int spawnRow;
     private int dimension;
 
-    private int rowsCount;
-    private int columnsCount;
+    private int sideSize;
 
     private boolean[][] tiles;
 
-    TileType(Color baseColor, int dimension, int columnsCount, int rowsCount, boolean[][] tiles) {
+    TileType(Color baseColor, int dimension, boolean[][] tiles) {
         this.baseColor = baseColor;
         this.lightColor = baseColor.brighter();
         this.darkColor = baseColor.darker();
         this.dimension = dimension;
         this.tiles = tiles;
-        this.columnsCount = columnsCount;
-        this.rowsCount = rowsCount;
+        this.sideSize = tiles.length;
 
         this.spawnColumn = 5 - (dimension >> 1);
         this.spawnRow = getTopInset(0);
@@ -94,12 +92,8 @@ enum TileType {
         return spawnRow;
     }
 
-    public int getRowsCount() {
-        return rowsCount;
-    }
-
-    public int getColumnsCount() {
-        return columnsCount;
+    public int getSideSize() {
+        return sideSize;
     }
 
     public boolean isTile(int x, int y, int rotation) {
