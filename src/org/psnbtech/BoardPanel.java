@@ -84,7 +84,7 @@ class BoardPanel extends JPanel {
 
     int checkLines() {
         int completedLines = 0;
-		
+
 		/*
 		 * Here we loop through every line and check it to see if
 		 * it's been cleared or not. If it has, we increment the
@@ -134,7 +134,7 @@ class BoardPanel extends JPanel {
 
         //This helps simplify the positioning of things.
         g.translate(BORDER_WIDTH, BORDER_WIDTH);
-		
+
 		/*
 		 * Draw the board differently depending on the current game state.
 		 */
@@ -146,7 +146,7 @@ class BoardPanel extends JPanel {
         } else if (tetris.isNewGame() || tetris.isGameOver()) {
             g.setFont(LARGE_FONT);
             g.setColor(Color.WHITE);
-			
+
 			/*
 			 * Because both the game over and new game screens are nearly identical,
 			 * we can handle them together and just use a ternary operator to change
@@ -158,83 +158,84 @@ class BoardPanel extends JPanel {
             msg = "Press Enter to Play" + (tetris.isNewGame() ? "" : " Again");
             g.drawString(msg, CENTER_X - g.getFontMetrics().stringWidth(msg) / 2, 300);
         } else {
-			
-			/*
-			 * Draw the tiles onto the board.
-			 */
-            for (int x = 0; x < COL_COUNT; x++) {
-                for (int y = HIDDEN_ROW_COUNT; y < ROW_COUNT; y++) {
-                    TileType tile = getTile(x, y);
-                    if (tile != null) {
-                        drawTile(tile, x * TILE_SIZE, (y - HIDDEN_ROW_COUNT) * TILE_SIZE, g);
-                    }
-                }
-            }
-			
-			/*
-			 * Draw the current piece. This cannot be drawn like the rest of the
-			 * pieces because it's still not part of the game board. If it were
-			 * part of the board, it would need to be removed every frame which
-			 * would just be slow and confusing.
-			 */
-            TileType type = tetris.getPieceType();
-            int pieceCol = tetris.getPieceCol();
-            int pieceRow = tetris.getPieceRow();
-            int rotation = tetris.getPieceRotation();
+            drawAllTiles(g);
+            drawCurrentPiece(g);
+            drawBackgroundGridAbovePieces(g);
+        }
 
-            //Draw the piece onto the board.
-            for (int col = 0; col < type.getDimension(); col++) {
-                for (int row = 0; row < type.getDimension(); row++) {
-                    if (pieceRow + row >= 2 && type.isTile(col, row, rotation)) {
-                        drawTile(type, (pieceCol + col) * TILE_SIZE, (pieceRow + row - HIDDEN_ROW_COUNT) * TILE_SIZE, g);
-                    }
-                }
-            }
-			
-			/*
-			 * Draw the ghost (semi-transparent piece that shows where the current piece will land). I couldn't think of
-			 * a better way to implement this so it'll have to do for now. We simply take the current position and move
-			 * down until we hit a row that would cause a collision.
-			 */
-            Color base = type.getBaseColor();
-            base = new Color(base.getRed(), base.getGreen(), base.getBlue(), 20);
-            for (int lowest = pieceRow; lowest < ROW_COUNT; lowest++) {
-                //If no collision is detected, try the next row.
-                if (isValidAndEmpty(type, pieceCol, lowest, rotation)) {
-                    continue;
-                }
+        drawOutline(g);
+    }
 
-                //Draw the ghost one row higher than the one the collision took place at.
-                lowest--;
-
-                //Draw the ghost piece.
-                for (int col = 0; col < type.getDimension(); col++) {
-                    for (int row = 0; row < type.getDimension(); row++) {
-                        if (lowest + row >= 2 && type.isTile(col, row, rotation)) {
-                            drawTile(base, base.brighter(), base.darker(), (pieceCol + col) * TILE_SIZE, (lowest + row - HIDDEN_ROW_COUNT) * TILE_SIZE, g);
-                        }
-                    }
-                }
-
-                break;
-            }
-			
-			/*
-			 * Draw the background grid above the pieces (serves as a useful visual
-			 * for players, and makes the pieces look nicer by breaking them up.
-			 */
-            g.setColor(Color.DARK_GRAY);
-            for (int x = 0; x < COL_COUNT; x++) {
-                for (int y = 0; y < VISIBLE_ROW_COUNT; y++) {
-                    g.drawLine(0, y * TILE_SIZE, COL_COUNT * TILE_SIZE, y * TILE_SIZE);
-                    g.drawLine(x * TILE_SIZE, 0, x * TILE_SIZE, VISIBLE_ROW_COUNT * TILE_SIZE);
+    private void drawAllTiles(Graphics g) {
+        for (int x = 0; x < COL_COUNT; x++) {
+            for (int y = HIDDEN_ROW_COUNT; y < ROW_COUNT; y++) {
+                TileType tile = getTile(x, y);
+                if (tile != null) {
+                    drawTile(tile, x * TILE_SIZE, (y - HIDDEN_ROW_COUNT) * TILE_SIZE, g);
                 }
             }
         }
-		
-		/*
-		 * Draw the outline.
-		 */
+    }
+
+    private void drawCurrentPiece(Graphics g) {
+        TileType type = tetris.getPieceType();
+        int pieceCol = tetris.getPieceCol();
+        int pieceRow = tetris.getPieceRow();
+        int rotation = tetris.getPieceRotation();
+
+        //Draw the piece onto the board.
+        for (int col = 0; col < type.getDimension(); col++) {
+            for (int row = 0; row < type.getDimension(); row++) {
+                if (pieceRow + row >= 2 && type.isTile(col, row, rotation)) {
+                    drawTile(type, (pieceCol + col) * TILE_SIZE, (pieceRow + row - HIDDEN_ROW_COUNT) * TILE_SIZE, g);
+                }
+            }
+        }
+
+        drawHelpingGhost(g, type, pieceCol, pieceRow, rotation);
+    }
+
+    private void drawHelpingGhost(Graphics g, TileType type, int pieceCol, int pieceRow, int rotation) {
+        Color base = type.getBaseColor();
+        Color transparentBase = new Color(base.getRed(), base.getGreen(), base.getBlue(), 20);
+        for (int lowest = pieceRow; lowest < ROW_COUNT; lowest++) {
+            if (isValidAndEmpty(type, pieceCol, lowest, rotation)) {
+                continue;
+            }
+
+            //Draw the ghost one row higher than the one the collision took place at.
+            lowest--;
+
+            //Draw the ghost piece.
+            for (int col = 0; col < type.getDimension(); col++) {
+                for (int row = 0; row < type.getDimension(); row++) {
+                    if (lowest + row >= 2 && type.isTile(col, row, rotation)) {
+                        drawTile(transparentBase,
+                                transparentBase.brighter(),
+                                transparentBase.darker(),
+                                (pieceCol + col) * TILE_SIZE,
+                                (lowest + row - HIDDEN_ROW_COUNT) * TILE_SIZE,
+                                g
+                        );
+                    }
+                }
+            }
+
+            break;
+        }
+    }
+
+    private void drawBackgroundGridAbovePieces(Graphics g) {
+        g.setColor(Color.DARK_GRAY);
+        for (int x = 0; x < COL_COUNT; x++) {
+            for (int y = 0; y < VISIBLE_ROW_COUNT; y++) {
+                g.drawLine(0, y * TILE_SIZE, COL_COUNT * TILE_SIZE, y * TILE_SIZE);
+                g.drawLine(x * TILE_SIZE, 0, x * TILE_SIZE, VISIBLE_ROW_COUNT * TILE_SIZE);
+            }
+        }
+    }
+
+    private void drawOutline(Graphics g) {
         g.setColor(Color.WHITE);
         g.drawRect(0, 0, TILE_SIZE * COL_COUNT, TILE_SIZE * VISIBLE_ROW_COUNT);
     }
