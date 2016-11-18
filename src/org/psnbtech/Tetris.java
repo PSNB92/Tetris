@@ -290,7 +290,7 @@ public class Tetris extends JFrame {
 			 * If a cycle has elapsed on the timer, we can update the game and
 			 * move our current piece down.
 			 */
-			if(logicTimer.hasElapsedCycle()) {
+			if(logicTimer.hasElapsedCycleAndDecrement()) {
 				updateGame();
 			}
 		
