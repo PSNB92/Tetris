@@ -82,17 +82,9 @@ class BoardPanel extends JPanel {
         }
     }
 
-    int checkLines() {
+    int checkLinesAndReturnHowManyRemoved() {
         int completedLines = 0;
 
-		/*
-		 * Here we loop through every line and check it to see if
-		 * it's been cleared or not. If it has, we increment the
-		 * number of completed lines and check the next row.
-		 * 
-		 * The isRowFullAndRemoveIt function handles clearing the line and
-		 * shifting the rest of the board down for us.
-		 */
         for (int row = 0; row < ROW_COUNT; row++) {
             if (isRowFullAndRemoveIt(row)) {
                 completedLines++;

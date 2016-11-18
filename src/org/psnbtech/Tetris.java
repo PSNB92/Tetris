@@ -11,7 +11,6 @@ public class Tetris extends JFrame {
     private static final int TYPE_COUNT = TileType.values().length;
     private static final Random random = new Random();
 
-
     private BoardPanel board;
     private SidePanel side;
     private boolean isPaused;
@@ -44,18 +43,14 @@ public class Tetris extends JFrame {
         add(board, BorderLayout.CENTER);
         add(side, BorderLayout.EAST);
 
-		/*
-         * Adds a custom anonymous KeyListener to the frame.
-		 */
         addKeyListener(new KeyAdapter() {
 
             @Override
             public void keyPressed(KeyEvent e) {
-
                 switch (e.getKeyCode()) {
 
 				/*
-				 * Drop - When pressed, we check to see that the game is not
+                 * Drop - When pressed, we check to see that the game is not
 				 * paused and that there is no drop cooldown, then set the
 				 * logic timer to run at a speed of 25 cycles per second.
 				 */
@@ -164,45 +159,24 @@ public class Tetris extends JFrame {
     }
 
     private void startGame() {
-		/*
-		 * Initialize our random number generator, logic timer, and new game variables.
-		 */
         this.isNewGame = true;
         this.gameSpeed = 1.0f;
-		
-		/*
-		 * Setup the timer to keep the game from running before the user presses enter
-		 * to start it.
-		 */
+
         this.logicTimer = new Clock(gameSpeed);
         logicTimer.setPaused(true);
 
         while (true) {
-            //Get the time that the frame started.
             long start = System.nanoTime();
-
-            //Update the logic timer.
             logicTimer.update();
-			
-			/*
-			 * If a cycle has elapsed on the timer, we can update the game and
-			 * move our current piece down.
-			 */
             if (logicTimer.hasElapsedCycleAndDecrement()) {
                 updateGame();
             }
-
-            //Decrement the drop cool down if necessary.
             if (dropCooldown > 0) {
                 dropCooldown--;
             }
 
-            //Display the window to the user.
             renderGame();
-			
-			/*
-			 * Sleep to cap the framerate.
-			 */
+
             long delta = (System.nanoTime() - start) / 1000000L;
             if (delta < FRAME_TIME) {
                 try {
@@ -214,9 +188,6 @@ public class Tetris extends JFrame {
         }
     }
 
-    /**
-     * Updates the game and handles the bulk of it's logic.
-     */
     private void updateGame() {
 		/*
 		 * Check to see if the piece's position can move down to the next row.
@@ -236,7 +207,7 @@ public class Tetris extends JFrame {
 			 * increase the player's score. (Up to 4 lines can be cleared in a single go;
 			 * [1 = 100pts, 2 = 200pts, 3 = 400pts, 4 = 800pts]).
 			 */
-            int cleared = board.checkLines();
+            int cleared = board.checkLinesAndReturnHowManyRemoved();
             if (cleared > 0) {
                 score += 50 << cleared;
             }
