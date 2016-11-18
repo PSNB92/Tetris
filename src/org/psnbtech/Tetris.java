@@ -203,41 +203,28 @@ public class Tetris extends JFrame {
             board.setPiece(currentType, currentCol, currentRow, currentRotation);
 			
 			/*
-			 * Check to see if adding the new piece resulted in any cleared lines. If so,
-			 * increase the player's score. (Up to 4 lines can be cleared in a single go;
+			 * Check to see if adding the new piece resulted in any clearedLines lines. If so,
+			 * increase the player's score. (Up to 4 lines can be clearedLines in a single go;
 			 * [1 = 100pts, 2 = 200pts, 3 = 400pts, 4 = 800pts]).
 			 */
-            int cleared = board.checkLinesAndReturnHowManyRemoved();
-            if (cleared > 0) {
-                score += 50 << cleared;
-            }
-			
+            int clearedLines = board.checkLinesAndReturnHowManyRemoved();
+            score += 100 * clearedLines;
+
 			/*
 			 * Increase the speed slightly for the next piece and update the game's timer
 			 * to reflect the increase.
 			 */
-            gameSpeed += 0.035f;
+            gameSpeed += 0.025f;
             logicTimer.setCyclesPerSecond(gameSpeed);
             logicTimer.reset();
-			
-			/*
-			 * Set the drop cooldown so the next piece doesn't automatically come flying
-			 * in from the heavens immediately after this piece hits if we've not reacted
-			 * yet. (~0.5 second buffer).
-			 */
             dropCooldown = 25;
-			
-			/*
-			 * Update the difficulty level. This has no effect on the game, and is only
-			 * used in the "Level" string in the SidePanel.
-			 */
-            level = (int) (gameSpeed * 1.70f);
-			
-			/*
-			 * Spawn a new piece to control.
-			 */
+            updateLevel();
             spawnPiece();
         }
+    }
+
+    private void updateLevel() {
+        level = (int) (gameSpeed * 1.70f);
     }
 
     private void renderGame() {
@@ -292,7 +279,6 @@ public class Tetris extends JFrame {
 		
 		/*
 		 * If the current piece is too far to the top or bottom, move the piece away from the edges
-		 * so that the piece doesn't clip out of the map and automatically become invalid.
 		 */
         if (currentRow < -top) {
             newRow -= currentRow - top;

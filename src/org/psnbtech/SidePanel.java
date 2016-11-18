@@ -38,50 +38,24 @@ class SidePanel extends JPanel {
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
 
-        //Set the color for drawing.
         g.setColor(DRAW_COLOR);
+        drawStats(g);
+        drawCategory(g);
+        drawPreview(g);
+    }
 
-		/*
-         * This variable stores the current y coordinate of the string.
-		 * This way we can re-order, add, or remove new strings if necessary
-		 * without needing to change the other strings.
-		 */
-        int offset;
+    private void drawPreview(Graphics g) {
+        drawPreviewBox(g);
+        drawPreviewPiece(g);
+    }
 
-		/*
-         * Draw the "Stats" category.
-		 */
-        g.setFont(LARGE_FONT);
-        g.drawString("Stats", SMALL_INSET, offset = STATS_INSET);
-        g.setFont(SMALL_FONT);
-        g.drawString("Level: " + tetris.getLevel(), LARGE_INSET, offset += TEXT_STRIDE);
-        g.drawString("Score: " + tetris.getScore(), LARGE_INSET, offset += TEXT_STRIDE);
-
-		/*
-		 * Draw the "Controls" category.
-		 */
-        g.setFont(LARGE_FONT);
-        g.drawString("Controls", SMALL_INSET, offset = CONTROLS_INSET);
-        g.setFont(SMALL_FONT);
-        g.drawString("A - Move Left", LARGE_INSET, offset += TEXT_STRIDE);
-        g.drawString("D - Move Right", LARGE_INSET, offset += TEXT_STRIDE);
-        g.drawString("Q - Rotate Anticlockwise", LARGE_INSET, offset += TEXT_STRIDE);
-        g.drawString("E - Rotate Clockwise", LARGE_INSET, offset += TEXT_STRIDE);
-        g.drawString("S - Drop", LARGE_INSET, offset += TEXT_STRIDE);
-        g.drawString("P - Pause Game", LARGE_INSET, offset += TEXT_STRIDE);
-		
-		/*
-		 * Draw the next piece preview box.
-		 */
+    private void drawPreviewBox(Graphics g) {
         g.setFont(LARGE_FONT);
         g.drawString("Next Piece:", SMALL_INSET, 70);
         g.drawRect(SQUARE_CENTER_X - SQUARE_SIZE, SQUARE_CENTER_Y - SQUARE_SIZE, SQUARE_SIZE * 2, SQUARE_SIZE * 2);
-		
-		/*
-		 * Draw a preview of the next piece that will be spawned. The code is pretty much
-		 * identical to the drawing code on the board, just smaller and centered, rather
-		 * than constrained to a grid.
-		 */
+    }
+
+    private void drawPreviewPiece(Graphics g) {
         TileType type = tetris.getNextPieceType();
         if (!tetris.isGameOver() && type != null) {
 
@@ -104,25 +78,43 @@ class SidePanel extends JPanel {
         }
     }
 
+    private void drawStats(Graphics g) {
+        int offset = STATS_INSET;
+        g.setFont(LARGE_FONT);
+        g.drawString("Stats", SMALL_INSET, offset);
+        g.setFont(SMALL_FONT);
+        g.drawString("Level: " + tetris.getLevel(), LARGE_INSET, offset += TEXT_STRIDE);
+        g.drawString("Score: " + tetris.getScore(), LARGE_INSET, offset += TEXT_STRIDE);
+    }
+
+    private void drawCategory(Graphics g) {
+        int offset = CONTROLS_INSET;
+        g.setFont(LARGE_FONT);
+        g.drawString("Controls", SMALL_INSET, offset);
+        g.setFont(SMALL_FONT);
+        g.drawString("A - Move Left", LARGE_INSET, offset += TEXT_STRIDE);
+        g.drawString("D - Move Right", LARGE_INSET, offset += TEXT_STRIDE);
+        g.drawString("Q - Rotate Anticlockwise", LARGE_INSET, offset += TEXT_STRIDE);
+        g.drawString("E - Rotate Clockwise", LARGE_INSET, offset += TEXT_STRIDE);
+        g.drawString("S - Drop", LARGE_INSET, offset += TEXT_STRIDE);
+        g.drawString("P - Pause Game", LARGE_INSET, offset += TEXT_STRIDE);
+    }
+
     private void drawTile(TileType type, int x, int y, Graphics g) {
-		/*
-		 * Fill the entire tile with the base color.
-		 */
+        drawBasicTile(type, x, y, g);
+        drawLightningShadow(type, x, y, g);
+    }
+
+    private void drawBasicTile(TileType type, int x, int y, Graphics g) {
         g.setColor(type.getBaseColor());
         g.fillRect(x, y, TILE_SIZE, TILE_SIZE);
-		
-		/*
-		 * Fill the bottom and right edges of the tile with the dark shading color.
-		 */
+
         g.setColor(type.getDarkColor());
         g.fillRect(x, y + TILE_SIZE - SHADE_WIDTH, TILE_SIZE, SHADE_WIDTH);
         g.fillRect(x + TILE_SIZE - SHADE_WIDTH, y, SHADE_WIDTH, TILE_SIZE);
-		
-		/*
-		 * Fill the top and left edges with the light shading. We draw a single line
-		 * for each row or column rather than a rectangle so that we can draw a nice
-		 * looking diagonal where the light and dark shading meet.
-		 */
+    }
+
+    private void drawLightningShadow(TileType type, int x, int y, Graphics g) {
         g.setColor(type.getLightColor());
         for (int i = 0; i < SHADE_WIDTH; i++) {
             g.drawLine(x, y + i, x + TILE_SIZE - i - 1, y + i);
