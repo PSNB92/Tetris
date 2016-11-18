@@ -45,23 +45,18 @@ class BoardPanel extends JPanel {
     }
 
     boolean isValidAndEmpty(TileType type, int x, int y, int rotation) {
-
-        //Ensure the piece is in a valid column.
-        if (x < -type.getLeftInset(rotation) || x + type.getDimension() - type.getRightInset(rotation) >= COL_COUNT) {
+        if (notInValidColumn(type, x, rotation)) {
             return false;
         }
 
-        //Ensure the piece is in a valid row.
-        if (y < -type.getTopInset(rotation) || y + type.getDimension() - type.getBottomInset(rotation) >= ROW_COUNT) {
+        if (notInValidRow(type, y, rotation)) {
             return false;
         }
 
-		/*
-         * Loop through every tile in the piece and see if it conflicts with an existing tile.
-		 * 
-		 * Note: It's fine to do this even though it allows for wrapping because we've already
-		 * checked to make sure the piece is in a valid location.
-		 */
+        return doesNotConflictWithOtherTiles(type, x, y, rotation);
+    }
+
+    private boolean doesNotConflictWithOtherTiles(TileType type, int x, int y, int rotation) {
         for (int col = 0; col < type.getDimension(); col++) {
             for (int row = 0; row < type.getDimension(); row++) {
                 if (type.isTile(col, row, rotation) && isOccupied(x + col, y + row)) {
@@ -70,6 +65,14 @@ class BoardPanel extends JPanel {
             }
         }
         return true;
+    }
+
+    private boolean notInValidRow(TileType type, int y, int rotation) {
+        return y < -type.getTopInset(rotation) || y + type.getDimension() - type.getBottomInset(rotation) >= ROW_COUNT;
+    }
+
+    private boolean notInValidColumn(TileType type, int x, int rotation) {
+        return x < -type.getLeftInset(rotation) || x + type.getDimension() - type.getRightInset(rotation) >= COL_COUNT;
     }
 
     void setPiece(TileType type, int x, int y, int rotation) {
@@ -124,38 +127,46 @@ class BoardPanel extends JPanel {
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
 
-        //This helps simplify the positioning of things.
         g.translate(BORDER_WIDTH, BORDER_WIDTH);
 
-		/*
-		 * Draw the board differently depending on the current game state.
-		 */
         if (tetris.isPaused()) {
-            g.setFont(LARGE_FONT);
-            g.setColor(Color.WHITE);
-            String msg = "PAUSED";
-            g.drawString(msg, CENTER_X - g.getFontMetrics().stringWidth(msg) / 2, CENTER_Y);
+            drawPausedScreen(g);
         } else if (tetris.isNewGame() || tetris.isGameOver()) {
-            g.setFont(LARGE_FONT);
-            g.setColor(Color.WHITE);
+            drawStartGameScreen(g);
+        } else {
+            drawGameScreen(g);
+        }
+
+        drawOutline(g);
+    }
+
+    private void drawGameScreen(Graphics g) {
+        drawAllTiles(g);
+        drawCurrentPiece(g);
+        drawBackgroundGridAbovePieces(g);
+    }
+
+    private void drawStartGameScreen(Graphics g) {
+        g.setFont(LARGE_FONT);
+        g.setColor(Color.WHITE);
 
 			/*
 			 * Because both the game over and new game screens are nearly identical,
 			 * we can handle them together and just use a ternary operator to change
 			 * the messages that are displayed.
 			 */
-            String msg = tetris.isNewGame() ? "TETRIS" : "GAME OVER";
-            g.drawString(msg, CENTER_X - g.getFontMetrics().stringWidth(msg) / 2, 150);
-            g.setFont(SMALL_FONT);
-            msg = "Press Enter to Play" + (tetris.isNewGame() ? "" : " Again");
-            g.drawString(msg, CENTER_X - g.getFontMetrics().stringWidth(msg) / 2, 300);
-        } else {
-            drawAllTiles(g);
-            drawCurrentPiece(g);
-            drawBackgroundGridAbovePieces(g);
-        }
+        String msg = tetris.isNewGame() ? "TETRIS" : "GAME OVER";
+        g.drawString(msg, CENTER_X - g.getFontMetrics().stringWidth(msg) / 2, 150);
+        g.setFont(SMALL_FONT);
+        msg = "Press Enter to Play" + (tetris.isNewGame() ? "" : " Again");
+        g.drawString(msg, CENTER_X - g.getFontMetrics().stringWidth(msg) / 2, 300);
+    }
 
-        drawOutline(g);
+    private void drawPausedScreen(Graphics g) {
+        g.setFont(LARGE_FONT);
+        g.setColor(Color.WHITE);
+        String msg = "PAUSED";
+        g.drawString(msg, CENTER_X - g.getFontMetrics().stringWidth(msg) / 2, CENTER_Y);
     }
 
     private void drawAllTiles(Graphics g) {
