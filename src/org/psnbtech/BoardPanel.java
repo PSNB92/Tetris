@@ -251,25 +251,20 @@ class BoardPanel extends JPanel {
     }
 
     private void drawTile(Color base, Color light, Color dark, int x, int y, Graphics g) {
-
-		/*
-         * Fill the entire tile with the base color.
-		 */
         g.setColor(base);
         g.fillRect(x, y, TILE_SIZE, TILE_SIZE);
 
-		/*
-		 * Fill the bottom and right edges of the tile with the dark shading color.
-		 */
+        bottomRightDarkShadow(dark, x, y, g);
+        topLeftLightningShadow(light, x, y, g);
+    }
+
+    private void bottomRightDarkShadow(Color dark, int x, int y, Graphics g) {
         g.setColor(dark);
         g.fillRect(x, y + TILE_SIZE - SHADE_WIDTH, TILE_SIZE, SHADE_WIDTH);
         g.fillRect(x + TILE_SIZE - SHADE_WIDTH, y, SHADE_WIDTH, TILE_SIZE);
-		
-		/*
-		 * Fill the top and left edges with the light shading. We draw a single line
-		 * for each row or column rather than a rectangle so that we can draw a nice
-		 * looking diagonal where the light and dark shading meet.
-		 */
+    }
+
+    private void topLeftLightningShadow(Color light, int x, int y, Graphics g) {
         g.setColor(light);
         for (int i = 0; i < SHADE_WIDTH; i++) {
             g.drawLine(x, y + i, x + TILE_SIZE - i - 1, y + i);

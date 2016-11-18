@@ -59,7 +59,7 @@ class SidePanel extends JPanel {
         Tile type = tetris.getNextPieceType();
         if (!tetris.isGameOver() && type != null) {
 
-            int cols = type.getSideSize();
+            int cols = type.getDimension();
             int dimension = type.getDimension();
 
             int startX = (SQUARE_CENTER_X - (cols * TILE_SIZE / 2));
