@@ -1,161 +1,48 @@
 package org.psnbtech;
 
+
 import java.awt.*;
 
-public enum TileType {
+enum TileType {
     TypeI(new Color(BoardPanel.COLOR_MIN, BoardPanel.COLOR_MAX, BoardPanel.COLOR_MAX), 4, 4, 1, new boolean[][]{
-            {
-                    false, false, false, false,
-                    true, true, true, true,
-                    false, false, false, false,
-                    false, false, false, false,
-            },
-            {
-                    false, false, true, false,
-                    false, false, true, false,
-                    false, false, true, false,
-                    false, false, true, false,
-            },
-            {
-                    false, false, false, false,
-                    false, false, false, false,
-                    true, true, true, true,
-                    false, false, false, false,
-            },
-            {
-                    false, true, false, false,
-                    false, true, false, false,
-                    false, true, false, false,
-                    false, true, false, false,
-            }
+            {false, false, false, false},
+            {true, true, true, true},
+            {false, false, false, false},
+            {false, false, false, false},
+
     }),
     TypeJ(new Color(BoardPanel.COLOR_MIN, BoardPanel.COLOR_MIN, BoardPanel.COLOR_MAX), 3, 3, 2, new boolean[][]{
-            {
-                    true, false, false,
-                    true, true, true,
-                    false, false, false,
-            },
-            {
-                    false, true, true,
-                    false, true, false,
-                    false, true, false,
-            },
-            {
-                    false, false, false,
-                    true, true, true,
-                    false, false, true,
-            },
-            {
-                    false, true, false,
-                    false, true, false,
-                    true, true, false,
-            }
+            {true, false, false},
+            {true, true, true},
+            {false, false, false},
+
     }),
     TypeL(new Color(BoardPanel.COLOR_MAX, 127, BoardPanel.COLOR_MIN), 3, 3, 2, new boolean[][]{
-            {
-                    false, false, true,
-                    true, true, true,
-                    false, false, false,
-            },
-            {
-                    false, true, false,
-                    false, true, false,
-                    false, true, true,
-            },
-            {
-                    false, false, false,
-                    true, true, true,
-                    true, false, false,
-            },
-            {
-                    true, true, false,
-                    false, true, false,
-                    false, true, false,
-            }
+            {false, false, true},
+            {true, true, true},
+            {false, false, false},
+
     }),
     TypeO(new Color(BoardPanel.COLOR_MAX, BoardPanel.COLOR_MAX, BoardPanel.COLOR_MIN), 2, 2, 2, new boolean[][]{
-            {
-                    true, true,
-                    true, true,
-            },
-            {
-                    true, true,
-                    true, true,
-            },
-            {
-                    true, true,
-                    true, true,
-            },
-            {
-                    true, true,
-                    true, true,
-            }
+            {true, true},
+            {true, true},
+
     }),
     TypeS(new Color(BoardPanel.COLOR_MIN, BoardPanel.COLOR_MAX, BoardPanel.COLOR_MIN), 3, 3, 2, new boolean[][]{
-            {
-                    false, true, true,
-                    true, true, false,
-                    false, false, false,
-            },
-            {
-                    false, true, false,
-                    false, true, true,
-                    false, false, true,
-            },
-            {
-                    false, false, false,
-                    false, true, true,
-                    true, true, false,
-            },
-            {
-                    true, false, false,
-                    true, true, false,
-                    false, true, false,
-            }
+            {false, true, true},
+            {true, true, false},
+            {false, false, false},
+
     }),
     TypeT(new Color(128, BoardPanel.COLOR_MIN, 128), 3, 3, 2, new boolean[][]{
-            {
-                    false, true, false,
-                    true, true, true,
-                    false, false, false,
-            },
-            {
-                    false, true, false,
-                    false, true, true,
-                    false, true, false,
-            },
-            {
-                    false, false, false,
-                    true, true, true,
-                    false, true, false,
-            },
-            {
-                    false, true, false,
-                    true, true, false,
-                    false, true, false,
-            }
+            {false, true, false},
+            {true, true, true},
+            {false, false, false},
     }),
     TypeZ(new Color(BoardPanel.COLOR_MAX, BoardPanel.COLOR_MIN, BoardPanel.COLOR_MIN), 3, 3, 2, new boolean[][]{
-            {
-                    true, true, false,
-                    false, true, true,
-                    false, false, false,
-            },
-            {
-                    false, false, true,
-                    false, true, true,
-                    false, true, false,
-            },
-            {
-                    false, false, false,
-                    true, true, false,
-                    false, true, true,
-            },
-            {
-                    false, true, false,
-                    true, true, false,
-                    true, false, false,
-            }
+            {true, true, false},
+            {false, true, true},
+            {false, false, false},
     });
 
     private Color baseColor;
@@ -216,7 +103,17 @@ public enum TileType {
     }
 
     public boolean isTile(int x, int y, int rotation) {
-        return tiles[rotation][y * dimension + x];
+        return getRotatedTile(rotation)[x][y];
+    }
+
+    public boolean[][] getRotatedTile(int rotation) {
+        boolean[][] input = tiles;
+
+        for (int i = 0; i < rotation; i++) {
+            input = ArrayUtils.rotateArray(input);
+        }
+
+        return input;
     }
 
     public int getLeftInset(int rotation) {
