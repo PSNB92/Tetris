@@ -58,12 +58,10 @@ class SidePanel extends JPanel {
     private void drawPreviewPiece(Graphics g) {
         Tile type = tetris.getNextPieceType();
         if (!tetris.isGameOver() && type != null) {
-
-            int cols = type.getDimension();
             int dimension = type.getDimension();
 
-            int startX = (SQUARE_CENTER_X - (cols * TILE_SIZE / 2));
-            int startY = (SQUARE_CENTER_Y - (cols * TILE_SIZE / 2));
+            int startX = (SQUARE_CENTER_X - (dimension * TILE_SIZE / 2));
+            int startY = (SQUARE_CENTER_Y - (dimension * TILE_SIZE / 2));
 
             int top = type.getTopInset(0);
             int left = type.getLeftInset(0);
