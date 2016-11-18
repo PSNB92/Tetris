@@ -163,9 +163,6 @@ public class Tetris extends JFrame {
         setVisible(true);
     }
 
-    /**
-     * Starts the game running. Initializes everything and enters the game loop.
-     */
     private void startGame() {
 		/*
 		 * Initialize our random number generator, logic timer, and new game variables.
@@ -343,43 +340,43 @@ public class Tetris extends JFrame {
         }
     }
 
-    public boolean isPaused() {
+    boolean isPaused() {
         return isPaused;
     }
 
-    public boolean isGameOver() {
+    boolean isGameOver() {
         return isGameOver;
     }
 
-    public boolean isNewGame() {
+    boolean isNewGame() {
         return isNewGame;
     }
 
-    public int getScore() {
+    int getScore() {
         return score;
     }
 
-    public int getLevel() {
+    int getLevel() {
         return level;
     }
 
-    public TileType getPieceType() {
+    TileType getPieceType() {
         return currentType;
     }
 
-    public TileType getNextPieceType() {
+    TileType getNextPieceType() {
         return nextType;
     }
 
-    public int getPieceCol() {
+    int getPieceCol() {
         return currentCol;
     }
 
-    public int getPieceRow() {
+    int getPieceRow() {
         return currentRow;
     }
 
-    public int getPieceRotation() {
+    int getPieceRotation() {
         return currentRotation;
     }
 

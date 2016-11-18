@@ -1,22 +1,22 @@
 package org.psnbtech;
 
-public class Clock {
+class Clock {
     private float millisPerCycle;
     private long lastUpdate;
     private int elapsedCycles;
     private float excessCycles;
     private boolean isPaused;
 
-    public Clock(float cyclesPerSecond) {
+    Clock(float cyclesPerSecond) {
         setCyclesPerSecond(cyclesPerSecond);
         reset();
     }
 
-    public void setCyclesPerSecond(float cyclesPerSecond) {
+    void setCyclesPerSecond(float cyclesPerSecond) {
         this.millisPerCycle = (1.0f / cyclesPerSecond) * 1000;
     }
 
-    public void reset() {
+    void reset() {
         this.elapsedCycles = 0;
         this.excessCycles = 0.0f;
         this.lastUpdate = getCurrentTime();
@@ -29,7 +29,7 @@ public class Clock {
      * method should be called every frame even when paused to prevent any
      * nasty surprises with the delta time.
      */
-    public void update() {
+    void update() {
         //Get the current time and calculate the delta time.
         long currUpdate = getCurrentTime();
         float delta = (float) (currUpdate - lastUpdate) + excessCycles;
@@ -44,11 +44,11 @@ public class Clock {
         this.lastUpdate = currUpdate;
     }
 
-    public void setPaused(boolean paused) {
+    void setPaused(boolean paused) {
         this.isPaused = paused;
     }
 
-    public boolean hasElapsedCycleAndDecrement() {
+    boolean hasElapsedCycleAndDecrement() {
         if (elapsedCycles > 0) {
             this.elapsedCycles--;
             return true;
@@ -56,8 +56,7 @@ public class Clock {
         return false;
     }
 
-    private static final long getCurrentTime() {
+    private static long getCurrentTime() {
         return (System.nanoTime() / 1000000L);
     }
-
 }

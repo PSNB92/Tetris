@@ -3,35 +3,32 @@ package org.psnbtech;
 import javax.swing.*;
 import java.awt.*;
 
-/**
- * The {@code BoardPanel} class is responsible for displaying the game grid and
- * handling things related to the game board.
- *
- * @author Brendan Jones
- */
-public class BoardPanel extends JPanel {
+class BoardPanel extends JPanel {
 
-    public static final int COLOR_MIN = 35;
-    public static final int COLOR_MAX = 255 - COLOR_MIN;
-    private static final int BORDER_WIDTH = 5;
-    public static final int COL_COUNT = 10;
+    static final int COLOR_MIN = 35;
+    static final int COLOR_MAX = 255 - COLOR_MIN;
+    static final int COL_COUNT = 10;
+
     private static final int VISIBLE_ROW_COUNT = 20;
     private static final int HIDDEN_ROW_COUNT = 2;
-    public static final int ROW_COUNT = VISIBLE_ROW_COUNT + HIDDEN_ROW_COUNT;
-    public static final int TILE_SIZE = 24;
-    public static final int SHADE_WIDTH = 4;
+
+    static final int ROW_COUNT = VISIBLE_ROW_COUNT + HIDDEN_ROW_COUNT;
+    static final int SHADE_WIDTH = 4;
+    static final int TILE_SIZE = 24;
+
+    private static final int BORDER_WIDTH = 5;
     private static final int CENTER_X = COL_COUNT * TILE_SIZE / 2;
     private static final int CENTER_Y = VISIBLE_ROW_COUNT * TILE_SIZE / 2;
-    public static final int PANEL_WIDTH = COL_COUNT * TILE_SIZE + BORDER_WIDTH * 2;
-    public static final int PANEL_HEIGHT = VISIBLE_ROW_COUNT * TILE_SIZE + BORDER_WIDTH * 2;
+    private static final int PANEL_WIDTH = COL_COUNT * TILE_SIZE + BORDER_WIDTH * 2;
     private static final Font LARGE_FONT = new Font("Tahoma", Font.BOLD, 16);
     private static final Font SMALL_FONT = new Font("Tahoma", Font.BOLD, 12);
 
+    static final int PANEL_HEIGHT = VISIBLE_ROW_COUNT * TILE_SIZE + BORDER_WIDTH * 2;
 
     private Tetris tetris;
     private TileType[][] tiles;
 
-    public BoardPanel(Tetris tetris) {
+    BoardPanel(Tetris tetris) {
         this.tetris = tetris;
         this.tiles = new TileType[ROW_COUNT][COL_COUNT];
 
@@ -39,7 +36,7 @@ public class BoardPanel extends JPanel {
         setBackground(Color.BLACK);
     }
 
-    public void clear() {
+    void clear() {
         for (int i = 0; i < ROW_COUNT; i++) {
             for (int j = 0; j < COL_COUNT; j++) {
                 tiles[i][j] = null;
@@ -47,7 +44,7 @@ public class BoardPanel extends JPanel {
         }
     }
 
-    public boolean isValidAndEmpty(TileType type, int x, int y, int rotation) {
+    boolean isValidAndEmpty(TileType type, int x, int y, int rotation) {
 
         //Ensure the piece is in a valid column.
         if (x < -type.getLeftInset(rotation) || x + type.getDimension() - type.getRightInset(rotation) >= COL_COUNT) {
@@ -75,7 +72,7 @@ public class BoardPanel extends JPanel {
         return true;
     }
 
-    public void addPiece(TileType type, int x, int y, int rotation) {
+    void addPiece(TileType type, int x, int y, int rotation) {
         // TODO rename to "setPiece"
 			/*
 		 * Loop through every tile within the piece and add it
@@ -91,8 +88,7 @@ public class BoardPanel extends JPanel {
         }
     }
 
-    public int checkLines() {
-
+    int checkLines() {
         int completedLines = 0;
 		
 		/*
@@ -254,13 +250,13 @@ public class BoardPanel extends JPanel {
     }
 
     private void drawTile(Color base, Color light, Color dark, int x, int y, Graphics g) {
-		
+
 		/*
 		 * Fill the entire tile with the base color.
 		 */
         g.setColor(base);
         g.fillRect(x, y, TILE_SIZE, TILE_SIZE);
-		
+
 		/*
 		 * Fill the bottom and right edges of the tile with the dark shading color.
 		 */
@@ -279,5 +275,4 @@ public class BoardPanel extends JPanel {
             g.drawLine(x + i, y, x + i, y + TILE_SIZE - i - 1);
         }
     }
-
 }
