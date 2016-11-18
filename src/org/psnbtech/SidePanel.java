@@ -56,7 +56,7 @@ class SidePanel extends JPanel {
         g.setFont(SMALL_FONT);
         g.drawString("Level: " + tetris.getLevel(), LARGE_INSET, offset += TEXT_STRIDE);
         g.drawString("Score: " + tetris.getScore(), LARGE_INSET, offset += TEXT_STRIDE);
-		
+
 		/*
 		 * Draw the "Controls" category.
 		 */

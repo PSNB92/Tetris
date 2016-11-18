@@ -57,7 +57,7 @@ class BoardPanel extends JPanel {
         }
 
 		/*
-		 * Loop through every tile in the piece and see if it conflicts with an existing tile.
+         * Loop through every tile in the piece and see if it conflicts with an existing tile.
 		 * 
 		 * Note: It's fine to do this even though it allows for wrapping because we've already
 		 * checked to make sure the piece is in a valid location.
@@ -72,13 +72,7 @@ class BoardPanel extends JPanel {
         return true;
     }
 
-    void addPiece(TileType type, int x, int y, int rotation) {
-        // TODO rename to "setPiece"
-			/*
-		 * Loop through every tile within the piece and add it
-		 * to the board only if the boolean that represents that
-		 * tile is set to true.
-		 */
+    void setPiece(TileType type, int x, int y, int rotation) {
         for (int col = 0; col < type.getDimension(); col++) {
             for (int row = 0; row < type.getDimension(); row++) {
                 if (type.isTile(col, row, rotation)) {

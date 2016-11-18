@@ -53,7 +53,7 @@ public class Tetris extends JFrame {
             public void keyPressed(KeyEvent e) {
 
                 switch (e.getKeyCode()) {
-				
+
 				/*
 				 * Drop - When pressed, we check to see that the game is not
 				 * paused and that there is no drop cooldown, then set the
@@ -229,7 +229,7 @@ public class Tetris extends JFrame {
 			 * We've either reached the bottom of the board, or landed on another piece, so
 			 * we need to add the piece to the board.
 			 */
-            board.addPiece(currentType, currentCol, currentRow, currentRotation);
+            board.setPiece(currentType, currentCol, currentRow, currentRotation);
 			
 			/*
 			 * Check to see if adding the new piece resulted in any cleared lines. If so,
