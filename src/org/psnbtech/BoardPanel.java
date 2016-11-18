@@ -222,8 +222,7 @@ class BoardPanel extends JPanel {
     }
 
     private int getLowestTilePoint(Tile tile, int pieceCol, int pieceRow, int rotation) {
-        int lowest;
-        for (lowest = pieceRow; lowest < ROW_COUNT; lowest++) {
+        for (int lowest = pieceRow; lowest < ROW_COUNT; lowest++) {
             if (isValidAndEmpty(tile, pieceCol, lowest, rotation)) {
                 continue;
             }
@@ -254,7 +253,7 @@ class BoardPanel extends JPanel {
     private void drawTile(Color base, Color light, Color dark, int x, int y, Graphics g) {
 
 		/*
-		 * Fill the entire tile with the base color.
+         * Fill the entire tile with the base color.
 		 */
         g.setColor(base);
         g.fillRect(x, y, TILE_SIZE, TILE_SIZE);
