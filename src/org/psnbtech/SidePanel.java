@@ -66,12 +66,18 @@ class SidePanel extends JPanel {
             int top = type.getTopInset(0);
             int left = type.getLeftInset(0);
 
-            for (int row = 0; row < dimension; row++) {
-                for (int col = 0; col < dimension; col++) {
-                    if (type.isTile(col, row, 0)) {
-                        drawTile(type, startX + ((col - left) * TILE_SIZE), startY + ((row - top) * TILE_SIZE), g);
-                    }
+            forEachTile(dimension, (row, col) -> {
+                if (type.isTile(col, row, 0)) {
+                    drawTile(type, startX + ((col - left) * TILE_SIZE), startY + ((row - top) * TILE_SIZE), g);
                 }
+            });
+        }
+    }
+
+    private void forEachTile(int count, TileIterator iterator) {
+        for (int row = 0; row < count; row++) {
+            for (int col = 0; col < count; col++) {
+                iterator.iterate(row, col);
             }
         }
     }
