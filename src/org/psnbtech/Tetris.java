@@ -4,12 +4,9 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.util.Random;
 
 public class Tetris extends JFrame {
     private static final long FRAME_TIME = 1000L / 50L;
-    private static final int TYPE_COUNT = Tile.values().length;
-    private static final Random random = new Random();
 
     private BoardPanel board;
     private SidePanel side;
@@ -236,7 +233,7 @@ public class Tetris extends JFrame {
         this.level = 1;
         this.score = 0;
         this.gameSpeed = 1.0f;
-        this.nextType = Tile.values()[random.nextInt(TYPE_COUNT)];
+        this.nextType = Tile.getRandomTile();
         this.isNewGame = false;
         this.isGameOver = false;
         board.clear();
@@ -250,7 +247,7 @@ public class Tetris extends JFrame {
         this.currentCol = currentType.getSpawnColumn();
         this.currentRow = currentType.getSpawnRow();
         this.currentRotation = 0;
-        this.nextType = Tile.values()[random.nextInt(TYPE_COUNT)];
+        this.nextType = Tile.getRandomTile();
 
         if (!board.isValidAndEmpty(currentType, currentCol, currentRow, currentRotation)) {
             this.isGameOver = true;

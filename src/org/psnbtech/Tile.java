@@ -2,6 +2,7 @@ package org.psnbtech;
 
 
 import java.awt.*;
+import java.util.Random;
 
 enum Tile {
     TypeI(new Color(BoardPanel.COLOR_MIN, BoardPanel.COLOR_MAX, BoardPanel.COLOR_MAX), new boolean[][]{
@@ -45,6 +46,8 @@ enum Tile {
             {false, false, false},
     });
 
+    private static final Random random = new Random();
+
     private Color baseColor;
     private Color lightColor;
     private Color darkColor;
@@ -64,6 +67,11 @@ enum Tile {
 
         this.spawnColumn = 5 - (dimension >> 1);
         this.spawnRow = getTopInset(0);
+    }
+
+    public static Tile getRandomTile() {
+        Tile[] values = Tile.values();
+        return values[random.nextInt(values.length)];
     }
 
     public Color getBaseColor() {
