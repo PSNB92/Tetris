@@ -1,7 +1,7 @@
 package org.psnbtech;
 
 class Clock {
-    private float millisPerCycle;
+    private float millisecondsPerCycle;
     private long lastUpdate;
     private int elapsedCycles;
     private float excessCycles;
@@ -13,47 +13,34 @@ class Clock {
     }
 
     void setCyclesPerSecond(float cyclesPerSecond) {
-        this.millisPerCycle = (1.0f / cyclesPerSecond) * 1000;
+        millisecondsPerCycle = 1000f / cyclesPerSecond;
     }
 
     void reset() {
-        this.elapsedCycles = 0;
-        this.excessCycles = 0.0f;
-        this.lastUpdate = getCurrentTime();
-        this.isPaused = false;
+        elapsedCycles = 0;
+        excessCycles = 0;
+        lastUpdate = getCurrentTime();
+        isPaused = false;
     }
 
-    /**
-     * Updates the clock stats. The number of elapsed cycles, as well as the
-     * cycle excess will be calculated only if the clock is not paused. This
-     * method should be called every frame even when paused to prevent any
-     * nasty surprises with the delta time.
-     */
     void update() {
-        //Get the current time and calculate the delta time.
-        long currUpdate = getCurrentTime();
-        float delta = (float) (currUpdate - lastUpdate) + excessCycles;
+        long currentTime = getCurrentTime();
+        float delta = (float) (currentTime - lastUpdate) + excessCycles;
 
-        //Update the number of elapsed and excess ticks if we're not paused.
         if (!isPaused) {
-            this.elapsedCycles += (int) Math.floor(delta / millisPerCycle);
-            this.excessCycles = delta % millisPerCycle;
+            elapsedCycles += (int) Math.floor(delta / millisecondsPerCycle);
+            excessCycles = delta % millisecondsPerCycle;
         }
 
-        //Set the last update time for the next update cycle.
-        this.lastUpdate = currUpdate;
+        lastUpdate = currentTime;
     }
 
     void setPaused(boolean paused) {
-        this.isPaused = paused;
+        isPaused = paused;
     }
 
     boolean hasElapsedCycleAndDecrement() {
-        if (elapsedCycles > 0) {
-            this.elapsedCycles--;
-            return true;
-        }
-        return false;
+        return elapsedCycles > 0;
     }
 
     private static long getCurrentTime() {
