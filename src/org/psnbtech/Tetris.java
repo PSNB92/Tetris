@@ -149,13 +149,29 @@ public class Tetris extends JFrame {
 				switch(e.getKeyCode()) {
 				
 				/*
-				 * Drop - When pressed, we check to see that the game is not
+				 * Soft Drop - When pressed, we check to see that the game is not
 				 * paused and that there is no drop cooldown, then set the
 				 * logic timer to run at a speed of 25 cycles per second.
 				 */
 				case KeyEvent.VK_DOWN:
 					if(!isPaused && dropCooldown == 0) {
 						logicTimer.setCyclesPerSecond(25.0f);
+					}
+					break;
+					
+				/*
+				 * Hard Drop - When pressed, we check to see that the game is not paused and
+				 * then check for the lowest available row and drop the piece to there.
+				 */
+				case KeyEvent.VK_UP:
+					if (!isPaused) {
+						for (int lowest = currentRow; lowest < board.ROW_COUNT; lowest++) {
+							// If no collision is detected, try the next row.
+							if (board.isValidAndEmpty(currentType, currentCol, lowest, currentRotation)) {
+								currentRow = lowest;
+							}
+
+						}
 					}
 					break;
 					
