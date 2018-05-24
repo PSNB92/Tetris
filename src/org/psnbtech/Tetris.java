@@ -198,6 +198,20 @@ public class Tetris extends JFrame {
 					break;
 					
 				/*
+				 * Switch Piece - When pressed, we check to see that the game is not paused and
+				 * then switch the current piece with the next piece.
+				 */
+
+				case KeyEvent.VK_SHIFT:
+					if (!isPaused) {
+						TileType bufferType;
+						bufferType = currentType;
+						currentType = nextType;
+						nextType = bufferType;
+					}
+					break;
+					
+				/*
 				 * Rotate Anticlockwise - When pressed, check to see that the game is not paused
 				 * and then attempt to rotate the piece anticlockwise. Because of the size and
 				 * complexity of the rotation code, as well as it's similarity to clockwise
