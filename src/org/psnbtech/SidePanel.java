@@ -64,12 +64,12 @@ public class SidePanel extends JPanel {
 	/**
 	 * The y coordinate of the stats category.
 	 */
-	private static final int STATS_INSET = 175;
+	private static final int STATS_INSET = 155;
 	
 	/**
 	 * The y coordinate of the controls category.
 	 */
-	private static final int CONTROLS_INSET = 300;
+	private static final int CONTROLS_INSET = 260;
 	
 	/**
 	 * The number of pixels to offset between each string.
@@ -136,11 +136,13 @@ public class SidePanel extends JPanel {
 		g.setFont(LARGE_FONT);
 		g.drawString("Controls", SMALL_INSET, offset = CONTROLS_INSET);
 		g.setFont(SMALL_FONT);
-		g.drawString("A - Move Left", LARGE_INSET, offset += TEXT_STRIDE);
-		g.drawString("D - Move Right", LARGE_INSET, offset += TEXT_STRIDE);
-		g.drawString("Q - Rotate Anticlockwise", LARGE_INSET, offset += TEXT_STRIDE);
-		g.drawString("E - Rotate Clockwise", LARGE_INSET, offset += TEXT_STRIDE);
-		g.drawString("S - Drop", LARGE_INSET, offset += TEXT_STRIDE);
+		g.drawString("< - Rotate Anticlockwise", LARGE_INSET, offset += TEXT_STRIDE);
+		g.drawString("> - Rotate Clockwise", LARGE_INSET, offset += TEXT_STRIDE);
+		g.drawString("Left Arrow - Move Left", LARGE_INSET, offset += TEXT_STRIDE);
+		g.drawString("Right Arrow - Move Right", LARGE_INSET, offset += TEXT_STRIDE);
+		g.drawString("Up Arrow - Hard Drop", LARGE_INSET, offset += TEXT_STRIDE);
+		g.drawString("Down Arrow - Soft Drop", LARGE_INSET, offset += TEXT_STRIDE);
+		g.drawString("Shift - Switch Next", LARGE_INSET, offset += TEXT_STRIDE);
 		g.drawString("P - Pause Game", LARGE_INSET, offset += TEXT_STRIDE);
 		
 		/*
