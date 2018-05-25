@@ -141,7 +141,8 @@ public class Tetris extends JFrame {
 		/*
 		 * Adds a custom anonymous KeyListener to the frame.
 		 */
-		addKeyListener(
+		TetrisKeyAdapter tetrisKeyAdapter = new TetrisKeyAdapter(this);
+		addKeyListener(tetrisKeyAdapter);
 		
 		/*
 		 * Here we resize the frame to hold the BoardPanel and SidePanel instances,
@@ -214,7 +215,7 @@ public class Tetris extends JFrame {
 		/*
 		 * Check to see if the piece's position can move down to the next row.
 		 */
-		if(board.isValidAndEmpty(currentType, currentCol, currentRow + 1, currentRotation)) {
+		if(board.isValidAndEmpty(currentType, currentCol, currentRow + 1, getCurrentRotation())) {
 			//Increment the current row if it's safe to do so.
 			currentRow++;
 		} else {
@@ -222,7 +223,7 @@ public class Tetris extends JFrame {
 			 * We've either reached the bottom of the board, or landed on another piece, so
 			 * we need to add the piece to the board.
 			 */
-			board.addPiece(currentType, currentCol, currentRow, currentRotation);
+			board.addPiece(currentType, currentCol, currentRow, getCurrentRotation());
 			
 			/*
 			 * Check to see if adding the new piece resulted in any cleared lines. If so,
@@ -299,14 +300,14 @@ public class Tetris extends JFrame {
 		this.currentType = nextType;
 		this.currentCol = currentType.getSpawnColumn();
 		this.currentRow = currentType.getSpawnRow();
-		this.currentRotation = 0;
+		this.setCurrentRotation(0);
 		this.nextType = TileType.values()[random.nextInt(TYPE_COUNT)];
 		
 		/*
 		 * If the spawn point is invalid, we need to pause the game and flag that we've lost
 		 * because it means that the pieces on the board have gotten too high.
 		 */
-		if(!board.isValidAndEmpty(currentType, currentCol, currentRow, currentRotation)) {
+		if(!board.isValidAndEmpty(currentType, currentCol, currentRow, getCurrentRotation())) {
 			this.isGameOver = true;
 			logicTimer.setPaused(true);
 		}		
@@ -359,7 +360,7 @@ public class Tetris extends JFrame {
 		 * position of the piece.
 		 */
 		if(board.isValidAndEmpty(currentType, newColumn, newRow, newRotation)) {
-			currentRotation = newRotation;
+			setCurrentRotation(newRotation);
 			currentRow = newRow;
 			currentCol = newColumn;
 		}
@@ -442,7 +443,7 @@ public class Tetris extends JFrame {
 	 * @return The rotation.
 	 */
 	public int getPieceRotation() {
-		return currentRotation;
+		return getCurrentRotation();
 	}
 
 	/**
@@ -453,6 +454,82 @@ public class Tetris extends JFrame {
 	public static void main(String[] args) {
 		Tetris tetris = new Tetris();
 		tetris.startGame();
+	}
+	
+	public BoardPanel getBoard() {
+		return board;
+	}
+
+	public void setBoard(BoardPanel board) {
+		this.board = board;
+	}
+
+	public Clock getLogicTimer() {
+		return logicTimer;
+	}
+
+	public void setLogicTimer(Clock logicTimer) {
+		this.logicTimer = logicTimer;
+	}
+
+	public TileType getCurrentType() {
+		return currentType;
+	}
+
+	public void setCurrentType(TileType currentType) {
+		this.currentType = currentType;
+	}
+
+	public TileType getNextType() {
+		return nextType;
+	}
+
+	public void setNextType(TileType nextType) {
+		this.nextType = nextType;
+	}
+
+	public int getCurrentCol() {
+		return currentCol;
+	}
+
+	public void setCurrentCol(int currentCol) {
+		this.currentCol = currentCol;
+	}
+
+	public int getCurrentRow() {
+		return currentRow;
+	}
+
+	public void setCurrentRow(int currentRow) {
+		this.currentRow = currentRow;
+	}
+
+	public int getDropCooldown() {
+		return dropCooldown;
+	}
+
+	public void setDropCooldown(int dropCooldown) {
+		this.dropCooldown = dropCooldown;
+	}
+
+	public void setPaused(boolean isPaused) {
+		this.isPaused = isPaused;
+	}
+
+	public void setNewGame(boolean isNewGame) {
+		this.isNewGame = isNewGame;
+	}
+
+	public void setGameOver(boolean isGameOver) {
+		this.isGameOver = isGameOver;
+	}
+
+	public int getCurrentRotation() {
+		return currentRotation;
+	}
+
+	public void setCurrentRotation(int currentRotation) {
+		this.currentRotation = currentRotation;
 	}
 
 }
