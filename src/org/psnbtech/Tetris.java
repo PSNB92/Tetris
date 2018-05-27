@@ -275,7 +275,7 @@ public class Tetris extends JFrame {
 	 * Resets the game variables to their default values at the start
 	 * of a new game.
 	 */
-	private void resetGame() {
+	void resetGame() {
 		this.level = 1;
 		this.score = 0;
 		this.gameSpeed = 1.0f;
@@ -315,9 +315,9 @@ public class Tetris extends JFrame {
 
 	/**
 	 * Attempts to set the rotation of the current piece to newRotation.
-	 * @param newRotation The rotation of the new peice.
+	 * @param newRotation The rotation of the new piece.
 	 */
-	private void rotatePiece(int newRotation) {
+	void rotatePiece(int newRotation) {
 		/*
 		 * Sometimes pieces will need to be moved when rotated to avoid clipping
 		 * out of the board (the I piece is a good example of this). Here we store
@@ -445,7 +445,39 @@ public class Tetris extends JFrame {
 	public int getPieceRotation() {
 		return getCurrentRotation();
 	}
+	
+	/**
+	 * Increments current row.
+	 * @return The row.
+	 */
+	public int incrementCurrentRow() {
+		return currentRow++;
+	}
+	
+	/**
+	 * Decrements current row.
+	 * @return The row.
+	 */
+	public int decrementCurrentRow() {
+		return currentRow--;
+	}
 
+	/**
+	 * Increments current column.
+	 * @return The column.
+	 */
+	public int incrementCurrentCol() {
+		return currentCol++;
+	}
+	
+	/**
+	 * Decrements current column.
+	 * @return The column.
+	 */
+	public int decrementCurrentCol() {
+		return currentCol--;
+	}
+	
 	/**
 	 * Entry-point of the game. Responsible for creating and starting a new
 	 * game instance.
@@ -530,6 +562,14 @@ public class Tetris extends JFrame {
 
 	public void setCurrentRotation(int currentRotation) {
 		this.currentRotation = currentRotation;
+	}
+
+	public float getGameSpeed() {
+		return gameSpeed;
+	}
+
+	public void setGameSpeed(float gameSpeed) {
+		this.gameSpeed = gameSpeed;
 	}
 
 }
