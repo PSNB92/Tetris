@@ -1,7 +1,5 @@
 package org.psnbtech;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.jupiter.api.Assertions.*;
 
 import java.awt.event.KeyEvent;
 
@@ -15,10 +13,10 @@ class TetrisKeyAdapterTest {
 		//given 
 		Tetris tetris = Mockito.mock(Tetris.class);
 		TetrisKeyAdapter tetrisKeyAdapter = new TetrisKeyAdapter(tetris);
+		KeyEvent e = Mockito.mock(KeyEvent.class);
+		Mockito.when(e.getKeyCode()).thenReturn(KeyEvent.VK_DOWN);
 		
 		//when button pressed
-		@SuppressWarnings("deprecation")
-		KeyEvent e = new KeyEvent(tetris, 0, 0, KeyEvent.VK_DOWN, 0);
 		tetrisKeyAdapter.keyPressed(e);
 
 		//then method tetris called
