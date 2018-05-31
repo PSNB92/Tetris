@@ -8,7 +8,7 @@ public class TetrisKeyAdapter implements KeyListener {
 	private Tetris tetris;
 
 	public TetrisKeyAdapter(Tetris tetris) {
-		tetris = this.tetris;
+		this.tetris = tetris;
 	}
 
 	@Override
