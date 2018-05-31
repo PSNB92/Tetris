@@ -478,16 +478,6 @@ public class Tetris extends JFrame {
 		return currentCol--;
 	}
 	
-	/**
-	 * Entry-point of the game. Responsible for creating and starting a new
-	 * game instance.
-	 * @param args Unused.
-	 */
-	public static void main(String[] args) {
-		Tetris tetris = new Tetris();
-		tetris.startGame();
-	}
-	
 	public BoardPanel getBoard() {
 		return board;
 	}
@@ -572,4 +562,14 @@ public class Tetris extends JFrame {
 		this.gameSpeed = gameSpeed;
 	}
 
+	/**
+	 * Entry-point of the game. Responsible for creating and starting a new
+	 * game instance.
+	 * @param args Unused.
+	 */
+	public static void main(String[] args) {
+		Tetris tetris = new Tetris();
+		tetris.startGame();
+	}
+	
 }
