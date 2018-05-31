@@ -345,7 +345,7 @@ public class BoardPanel extends JPanel {
 			 * down until we hit a row that would cause a collision.
 			 */
 			Color base = type.getBaseColor();
-			base = new Color(base.getRed(), base.getGreen(), base.getBlue(), 20);
+			base = new Color(base.getRed(), base.getGreen(), base.getBlue(), 50);
 			for(int lowest = pieceRow; lowest < ROW_COUNT; lowest++) {
 				//If no collision is detected, try the next row.
 				if(isValidAndEmpty(type, pieceCol, lowest, rotation)) {					
